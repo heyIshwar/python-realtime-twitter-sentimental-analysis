@@ -12,15 +12,18 @@ This is a python program to get tweets in streaming from twitter database and re
 
 ## Requirements
 
-    1. Python 3.0 installed.
-    2. Install Tweepy: ```pip install tweepy```
-    3. Twitter Account.
+1. Python 3.0 installed.
+2. Install Tweepy: ```pip install tweepy```
+3. Twitter Account.
 
 ## Twitter Access
 
 To get twitter data, you need 4 access key. Its very simple to get those.
+
 Go to https://apps.twitter.com and click in 'Create New App' and insert the request informations.
+
 Now you create a Twitter App, lets go get there keys. Open the App page and click in Keys and Access Token.
+
 Alright, now we knows the App Key and the App Token.
 
 ## The Code
@@ -61,4 +64,5 @@ if __name__ == '__main__':
 ## Fonts
 
 Tweepy GitHub: https://github.com/tweepy/tweepy
+
 This code were based from this link: http://adilmoujahid.com/posts/2014/07/twitter-analytics/
