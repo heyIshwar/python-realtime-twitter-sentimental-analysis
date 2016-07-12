@@ -61,6 +61,12 @@ if __name__ == '__main__':
     stream.filter(track=['key1', 'key2'])
 ```
 
+## Execute
+
+Now we can execute the program. Just type in terminal: ```python file_name.py``` and see the magic.
+
+To send all this data to a JSON file, type: ```python file_name.py > name_json.js```
+
 ## Fonts
 
 Tweepy GitHub: https://github.com/tweepy/tweepy
