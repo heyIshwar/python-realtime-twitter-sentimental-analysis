@@ -13,7 +13,7 @@ access_token = os.getenv("access_token")
 access_token_secret = os.getenv("access_token_secret")
 
 positive, neutral, negative, total = 0, 0, 0, 0
-
+allTweets, covidTweets  = 0, 0
 # StreamListener class inherits from tweepy.StreamListener and overrides on_status/on_error methods.
 class StreamListener(tweepy.StreamListener):
     def on_status(self, status):
@@ -38,35 +38,7 @@ class StreamListener(tweepy.StreamListener):
         neutral_percent = (neutral/total)*100
         negative_percent = (negative/total)*100
 
-        print('{:>5}'.format(total) + "\t" + status.id_str + "\t" + '{:>6}'.format('{:04.2f}'.format(score)) + "\t" + '{:<10}'.format(polarity) + "\t" + "| Total: " + '{:05.2f}'.format(positive_percent)+"% +ve  " + '{:05.2f}'.format(neutral_percent)+"% --  " + '{:05.2f}'.format(negative_percent) + "% -ve")
-
-        # if "retweeted_status" attribute exists, flag this tweet as a retweet.
-        is_retweet = hasattr(status, "retweeted_status")
-
-        # check if text has been truncated
-        if hasattr(status, "extended_tweet"):
-            text = status.extended_tweet["full_text"]
-        else:
-            text = status.text
-
-        # check if this is a quote tweet.
-        is_quote = hasattr(status, "quoted_status")
-        quoted_text = ""
-        if is_quote:
-            # check if quoted tweet's text has been truncated before recording it
-            if hasattr(status.quoted_status, "extended_tweet"):
-                quoted_text = status.quoted_status.extended_tweet["full_text"]
-            else:
-                quoted_text = status.quoted_status.text
-
-        # remove characters that might cause problems with csv encoding
-        remove_characters = [",", "\n"]
-        for c in remove_characters:
-            text.replace(c, " ")
-            quoted_text.replace(c, " ")
-
-        with open("out.csv", "a", encoding='utf-8') as f:
-            f.write("%s,%s,%s,%s,%s,%s\n" % (status.created_at, status.user.screen_name, is_retweet, is_quote, text, quoted_text))
+        print('{:>5}'.format(total) + "\t" + '{:<15}'.format(status.user.screen_name) + "\t" + '{:>6}'.format('{:04.2f}'.format(score)) + "\t" + '{:<10}'.format(polarity) + "\t" + "| Total: " + '{:05.2f}'.format(positive_percent)+"% +ve  " + '{:05.2f}'.format(neutral_percent)+"% --  " + '{:05.2f}'.format(negative_percent) + "% 000-ve")
 
     def on_error(self, status_code):
         print("Encountered streaming error (", status_code, ")")
@@ -82,8 +54,9 @@ if __name__ == "__main__":
     # initialize stream
     streamListener = StreamListener()
     stream = tweepy.Stream( auth=api.auth, listener=streamListener, tweet_mode='extended')
-    with open("out.csv", "w", encoding='utf-8') as f:
-        f.write("date,user,is_retweet,is_quote,text,quoted_text\n")
+    with open("out.tsv", "w", encoding='utf-8') as f:
+        f.write("date\tuser\tis_retweet\tis_quote\ttext\tquoted_text\n")
     
-    tags = ["#IndiaFightsCorona"]
+    tags = ["coronavirus", "covid19", "corona virus", "corona"]
+    geolocation = [68.8886673394, 7.3093336457, 96.5973406314, 34.6180539772]
     stream.filter(track=tags)
